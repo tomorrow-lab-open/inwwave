@@ -136,6 +136,20 @@ def dump_op(operator, depth=0):
         except:
             pass
 
+    # --- MAT (material) info ---
+    if operator.family == 'MAT':
+        try:
+            info['mat_type'] = operator.type
+        except:
+            pass
+
+    # --- Catch-all for any other family (future-proof) ---
+    # Modern TD families: COMP, TOP, CHOP, SOP, DAT, MAT
+    # Legacy POPs are now SOP-based particles (already captured above)
+    # This catches anything unexpected
+    if operator.family not in ('COMP', 'TOP', 'CHOP', 'SOP', 'DAT', 'MAT'):
+        info['note'] = f'Unknown family: {operator.family}'
+
     # --- Children (COMPs only) ---
     if operator.isCOMP:
         try:
